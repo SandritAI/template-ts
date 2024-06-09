@@ -1,5 +1,6 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -35,7 +36,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
-    z-index: 1; /* Assurez-vous que le fond est en dessous */
+    z-index: 1; 
 }
 
 .clock-time {
@@ -44,5 +45,12 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2rem;
-    z-index: 2; /* Assurez-vous que le texte est au-dessus */
+    z-index: 2; 
+}
+
+.button-container {
+    margin-top: 20px; 
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
