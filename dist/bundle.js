@@ -1,0 +1,2 @@
+(()=>{function t(t,e){for(var n=t.toString();n.length<e;)n="0"+n;return n}setInterval((function(){var e=document.getElementById("clock");if(e){var n=new Date,c=t(n.getHours(),2),o=t(n.getMinutes(),2),r=t(n.getSeconds(),2);e.textContent="".concat(c,":").concat(o,":").concat(r)}}),1e3)})();
+//# sourceMappingURL=bundle.js.map
