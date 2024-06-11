@@ -1,3 +1,4 @@
+import './index.css';
 // Fonction pour ajouter un padding à gauche
 function padLeft(value: number, length: number): string {
     let strValue = value.toString();

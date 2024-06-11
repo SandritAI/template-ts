@@ -10,6 +10,13 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+.button-container {
+    margin-top: 20px; 
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .clock-container {
     text-align: center;
 }
@@ -48,9 +55,3 @@ body {
     z-index: 2; 
 }
 
-.button-container {
-    margin-top: 20px; 
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
