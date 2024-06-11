@@ -10,5 +10,4 @@ function toggleLight(): void {
     }
 }
 
-// Exporter la fonction pour qu'elle soit accessible depuis index.ts
 export { toggleLight };

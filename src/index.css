@@ -14,7 +14,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 20px; /* Ajouter un espacement entre les horloges */
+    margin-right: 20px; 
 }
 
 .clocks-wrapper {
@@ -103,11 +103,11 @@ body {
 }
 
 .btn-outline-primary:focus {
-    background-color: #007bff !important; /* Remplissage bleu */
-    color: #fff !important; /* Texte blanc */
+    background-color: #007bff !important; 
+    color: #fff !important; 
 }
 
 .light-on .btn-outline-primary:focus {
-    background-color: #ff0000 !important; /* Remplissage rouge */
-    color: #000000 !important; /* Texte noir */
+    background-color: #ff0000 !important; 
+    color: #000000 !important; 
 }
