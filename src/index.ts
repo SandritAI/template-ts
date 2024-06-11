@@ -1,5 +1,5 @@
 import './index.css';
-import { updateClock, toggleMode, increaseTime } from './watch';
+import { updateClock, toggleMode, increaseTime } from './watch-time';
 import { toggleLight } from './watch-light';
 
 // Appelez updateClock pour afficher l'heure immédiatement

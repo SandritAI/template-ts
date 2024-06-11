@@ -5,13 +5,14 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #282c34;
-    color: white;
+    background-color: #212833;
+    color: rgb(9, 8, 14);
     font-family: 'Arial', sans-serif;
 }
 
 .button-container {
-    margin-top: 40px; 
+    margin-top: 20px; 
+    margin-bottom : 40 px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -38,7 +39,7 @@ body {
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    background-color: #3c4043;
+    background-color: #272c30;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,6 +58,27 @@ body {
 
 .light-on {
     background-color: #fff;
-    color: #000;
 }
 
+.light-on .clock {
+    border-color: #ff0000;
+}
+
+.light-on .clock-face {
+    background-color: #000; /* Cadran noir */
+    color: #fff; /* Texte blanc */
+}
+
+.light-on .clock-time {
+    color: #fff; /* Timer blanc */
+}
+
+.light-on .btn-outline-primary {
+    color: #000000; /* Texte blanc */
+    border-color: #ff0000; /* Bordure rouge */
+}
+
+.light-on .btn-outline-primary:hover {
+    background-color: #ff0000; /* Fond rouge au survol */
+    color: #000000; /* Texte blanc */
+}
