@@ -1,7 +1,6 @@
-// watch.ts
-
 let editMode = 0; // 0: non editable, 1: edit hours, 2: edit minutes
 let currentTime = new Date();
+let lastUpdateTime = currentTime.getTime();
 
 function padLeft(value: number, length: number): string {
     let strValue = value.toString();
@@ -52,8 +51,14 @@ export { updateClock, toggleMode, increaseTime };
 
 // Met à jour l'horloge chaque seconde
 setInterval(() => {
+    const now = new Date().getTime();
+    const elapsed = now - lastUpdateTime;
+    lastUpdateTime = now;
+
     if (editMode === 0) {
-        currentTime = new Date();
+        currentTime = new Date(currentTime.getTime() + elapsed);
+    } else {
+        currentTime.setSeconds(currentTime.getSeconds() + Math.floor(elapsed / 1000));
     }
     updateClock();
 }, 1000);
