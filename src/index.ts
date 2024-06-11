@@ -1,9 +1,9 @@
 import './index.css';
-import { updateClock, toggleMode, increaseTime } from './watch-time';
+import { updateAllClocks, toggleMode, increaseTime } from './watch-time';
 import { toggleLight } from './watch-light';
 
-// Appelez updateClock pour afficher l'heure immédiatement
-updateClock();
+// Appelez updateAllClocks pour afficher l'heure immédiatement
+updateAllClocks();
 
 // Attacher les événements après le chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {

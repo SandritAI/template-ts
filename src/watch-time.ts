@@ -2,6 +2,8 @@ let editMode = 0; // 0: non editable, 1: edit hours, 2: edit minutes
 let currentTime = new Date();
 let lastUpdateTime = currentTime.getTime();
 
+const timeOffsets = [0, 1, 2]; // Définir les décalages horaires pour chaque horloge en heures
+
 function padLeft(value: number, length: number): string {
     let strValue = value.toString();
     while (strValue.length < length) {
@@ -10,15 +12,16 @@ function padLeft(value: number, length: number): string {
     return strValue;
 }
 
-function updateClock(): void {
-    const clockElement = document.getElementById('clock');
+function updateClock(clockElementId: string, offset: number): void {
+    const clockElement = document.getElementById(clockElementId);
     if (clockElement) {
-        const hours = padLeft(currentTime.getHours(), 2);
-        const minutes = padLeft(currentTime.getMinutes(), 2);
-        const seconds = padLeft(currentTime.getSeconds(), 2);
+        const localTime = new Date(currentTime.getTime() + offset * 3600000);
+        const hours = padLeft(localTime.getHours(), 2);
+        const minutes = padLeft(localTime.getMinutes(), 2);
+        const seconds = padLeft(localTime.getSeconds(), 2);
         clockElement.textContent = `${hours}:${minutes}:${seconds}`;
     }
-    console.log(`Clock updated: ${clockElement?.textContent}`);
+    console.log(`Clock updated (${clockElementId}): ${clockElement?.textContent}`);
 }
 
 function toggleMode(): void {
@@ -42,14 +45,20 @@ function increaseTime(): void {
     } else if (editMode === 2) {
         currentTime.setMinutes(currentTime.getMinutes() + 1);
     }
-    updateClock();
+    updateAllClocks();
     console.log(`Time increased: ${currentTime}`);
 }
 
-// Exposez les fonctions nécessaires
-export { updateClock, toggleMode, increaseTime };
+function updateAllClocks(): void {
+    updateClock('clock-time-1', timeOffsets[0]);
+    updateClock('clock-time-2', timeOffsets[1]);
+    updateClock('clock-time-3', timeOffsets[2]);
+}
 
-// Met à jour l'horloge chaque seconde
+// Exposez les fonctions nécessaires
+export { updateAllClocks, toggleMode, increaseTime };
+
+// Met à jour les horloges chaque seconde
 setInterval(() => {
     const now = new Date().getTime();
     const elapsed = now - lastUpdateTime;
@@ -60,5 +69,5 @@ setInterval(() => {
     } else {
         currentTime.setSeconds(currentTime.getSeconds() + Math.floor(elapsed / 1000));
     }
-    updateClock();
+    updateAllClocks();
 }, 1000);
