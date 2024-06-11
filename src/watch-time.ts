@@ -1,8 +1,8 @@
-let editMode = 0; // 0: non editable, 1: edit hours, 2: edit minutes
+let editMode = [0, 0, 0]; // Array to track edit mode for each clock
 let currentTime = new Date();
 let lastUpdateTime = currentTime.getTime();
 
-const timeOffsets = [0, 1, 2]; // Définir les décalages horaires pour chaque horloge en heures
+const timeOffsets = [0, 1, 2]; // Define time offsets for each clock in hours
 
 function padLeft(value: number, length: number): string {
     let strValue = value.toString();
@@ -24,29 +24,29 @@ function updateClock(clockElementId: string, offset: number): void {
     console.log(`Clock updated (${clockElementId}): ${clockElement?.textContent}`);
 }
 
-function toggleMode(): void {
-    editMode = (editMode + 1) % 3;
-    const modeButton = document.getElementById('mode');
+function toggleMode(clockIndex: number): void {
+    editMode[clockIndex] = (editMode[clockIndex] + 1) % 3;
+    const modeButton = document.getElementById(`mode-${clockIndex + 1}`);
     if (modeButton) {
-        if (editMode === 0) {
+        if (editMode[clockIndex] === 0) {
             modeButton.textContent = 'Mode: View';
-        } else if (editMode === 1) {
+        } else if (editMode[clockIndex] === 1) {
             modeButton.textContent = 'Mode: Edit Hours';
-        } else if (editMode === 2) {
+        } else if (editMode[clockIndex] === 2) {
             modeButton.textContent = 'Mode: Edit Minutes';
         }
     }
-    console.log(`Mode changed: ${editMode}`);
+    console.log(`Mode changed for clock ${clockIndex + 1}: ${editMode[clockIndex]}`);
 }
 
-function increaseTime(): void {
-    if (editMode === 1) {
+function increaseTime(clockIndex: number): void {
+    if (editMode[clockIndex] === 1) {
         currentTime.setHours(currentTime.getHours() + 1);
-    } else if (editMode === 2) {
+    } else if (editMode[clockIndex] === 2) {
         currentTime.setMinutes(currentTime.getMinutes() + 1);
     }
     updateAllClocks();
-    console.log(`Time increased: ${currentTime}`);
+    console.log(`Time increased for clock ${clockIndex + 1}: ${currentTime}`);
 }
 
 function updateAllClocks(): void {
@@ -55,16 +55,16 @@ function updateAllClocks(): void {
     updateClock('clock-time-3', timeOffsets[2]);
 }
 
-// Exposez les fonctions nécessaires
+// Expose necessary functions
 export { updateAllClocks, toggleMode, increaseTime };
 
-// Met à jour les horloges chaque seconde
+// Update clocks every second
 setInterval(() => {
     const now = new Date().getTime();
     const elapsed = now - lastUpdateTime;
     lastUpdateTime = now;
 
-    if (editMode === 0) {
+    if (editMode.every(mode => mode === 0)) {
         currentTime = new Date(currentTime.getTime() + elapsed);
     } else {
         currentTime.setSeconds(currentTime.getSeconds() + Math.floor(elapsed / 1000));

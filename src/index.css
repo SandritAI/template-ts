@@ -10,9 +10,27 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+.clocks-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.clock-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .button-container {
-    margin-top: 20px; 
-    margin-bottom : 40 px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.button-container-light {
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -44,7 +62,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .clock-time {
@@ -53,7 +71,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2rem;
-    z-index: 2; 
+    z-index: 2;
 }
 
 .light-on {
@@ -65,20 +83,30 @@ body {
 }
 
 .light-on .clock-face {
-    background-color: #000; /* Cadran noir */
-    color: #fff; /* Texte blanc */
+    background-color: #000;
+    color: #fff;
 }
 
 .light-on .clock-time {
-    color: #fff; /* Timer blanc */
+    color: #fff;
 }
 
 .light-on .btn-outline-primary {
-    color: #000000; /* Texte blanc */
-    border-color: #ff0000; /* Bordure rouge */
+    color: #000;
+    border-color: #ff0000;
 }
 
 .light-on .btn-outline-primary:hover {
-    background-color: #ff0000; /* Fond rouge au survol */
-    color: #000000; /* Texte blanc */
+    background-color: #ff0000;
+    color: #000;
+}
+
+.btn-outline-primary:focus {
+    background-color: #007bff !important; /* Remplissage bleu */
+    color: #fff !important; /* Texte blanc */
+}
+
+.light-on .btn-outline-primary:focus {
+    background-color: #ff0000 !important; /* Remplissage rouge */
+    color: #000000 !important; /* Texte noir */
 }
