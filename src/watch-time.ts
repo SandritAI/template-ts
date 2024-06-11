@@ -1,6 +1,6 @@
 let editMode = [0, 0, 0]; // Array to track edit mode for each clock
-let currentTime = new Date();
-let lastUpdateTime = currentTime.getTime();
+let currentTime = [new Date(), new Date(), new Date()]; // Array to track time for each clock
+let lastUpdateTime = new Date().getTime();
 
 const timeOffsets = [0, 1, 2]; // Define time offsets for each clock in hours
 
@@ -12,10 +12,10 @@ function padLeft(value: number, length: number): string {
     return strValue;
 }
 
-function updateClock(clockElementId: string, offset: number): void {
+function updateClock(clockElementId: string, offset: number, index: number): void {
     const clockElement = document.getElementById(clockElementId);
     if (clockElement) {
-        const localTime = new Date(currentTime.getTime() + offset * 3600000);
+        const localTime = new Date(currentTime[index].getTime() + offset * 3600000);
         const hours = padLeft(localTime.getHours(), 2);
         const minutes = padLeft(localTime.getMinutes(), 2);
         const seconds = padLeft(localTime.getSeconds(), 2);
@@ -41,18 +41,18 @@ function toggleMode(clockIndex: number): void {
 
 function increaseTime(clockIndex: number): void {
     if (editMode[clockIndex] === 1) {
-        currentTime.setHours(currentTime.getHours() + 1);
+        currentTime[clockIndex].setHours(currentTime[clockIndex].getHours() + 1);
     } else if (editMode[clockIndex] === 2) {
-        currentTime.setMinutes(currentTime.getMinutes() + 1);
+        currentTime[clockIndex].setMinutes(currentTime[clockIndex].getMinutes() + 1);
     }
-    updateAllClocks();
-    console.log(`Time increased for clock ${clockIndex + 1}: ${currentTime}`);
+    updateClock(`clock-time-${clockIndex + 1}`, timeOffsets[clockIndex], clockIndex);
+    console.log(`Time increased for clock ${clockIndex + 1}: ${currentTime[clockIndex]}`);
 }
 
 function updateAllClocks(): void {
-    updateClock('clock-time-1', timeOffsets[0]);
-    updateClock('clock-time-2', timeOffsets[1]);
-    updateClock('clock-time-3', timeOffsets[2]);
+    for (let i = 0; i < 3; i++) {
+        updateClock(`clock-time-${i + 1}`, timeOffsets[i], i);
+    }
 }
 
 // Expose necessary functions
@@ -64,10 +64,12 @@ setInterval(() => {
     const elapsed = now - lastUpdateTime;
     lastUpdateTime = now;
 
-    if (editMode.every(mode => mode === 0)) {
-        currentTime = new Date(currentTime.getTime() + elapsed);
-    } else {
-        currentTime.setSeconds(currentTime.getSeconds() + Math.floor(elapsed / 1000));
+    for (let i = 0; i < 3; i++) {
+        if (editMode[i] === 0) {
+            currentTime[i] = new Date(currentTime[i].getTime() + elapsed);
+        } else {
+            currentTime[i].setSeconds(currentTime[i].getSeconds() + Math.floor(elapsed / 1000));
+        }
     }
     updateAllClocks();
 }, 1000);
