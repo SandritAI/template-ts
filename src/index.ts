@@ -1,21 +1,25 @@
 import './index.css';
 import { updateClock, toggleMode, increaseTime } from './watch';
+import { toggleLight } from './watch-light';
 
 // Appelez updateClock pour afficher l'heure immédiatement
 updateClock();
 
-// Attachez les événements après le chargement du DOM
+// Attacher les événements après le chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
     const modeButton = document.getElementById('mode');
     const increaseButton = document.getElementById('increase');
+    const lightButton = document.getElementById('light'); // Ajout du bouton light
 
     if (modeButton) {
         modeButton.addEventListener('click', toggleMode);
-        console.log('Mode button event listener attached');
     }
 
     if (increaseButton) {
         increaseButton.addEventListener('click', increaseTime);
-        console.log('Increase button event listener attached');
+    }
+
+    if (lightButton) {
+        lightButton.addEventListener('click', toggleLight); // Ajout de l'événement pour le bouton light
     }
 });

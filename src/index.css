@@ -55,3 +55,8 @@ body {
     z-index: 2; 
 }
 
+.light-on {
+    background-color: #fff;
+    color: #000;
+}
+
