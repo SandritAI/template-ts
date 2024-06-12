@@ -1,79 +1,76 @@
-let editMode = [0, 0, 0]; // Edit of each clock
-let currentTime = [new Date(), new Date(), new Date()]; // Hour of each clock
-let lastUpdateTime = new Date().getTime();
+class Clock {
+    private currentTime: Date;
+    private editMode: number = 0;
+    private offset: number;
+    private lastUpdateTime: number;
 
-const timeOffsets = [0, 1, 2]; 
-
-function padLeft(value: number, length: number): string {
-    let strValue = value.toString();
-    while (strValue.length < length) {
-        strValue = '0' + strValue;
+    constructor(private clockElementId: string, private clockIndex: number, offset: number) {
+        this.currentTime = new Date();
+        this.offset = offset;
+        this.lastUpdateTime = new Date().getTime();
+        this.updateClock();
+        setInterval(() => this.updateRealTime(), 1000);
     }
-    return strValue;
-}
 
-function updateClock(clockElementId: string, offset: number, index: number): void {
-    const clockElement = document.getElementById(clockElementId);
-    if (clockElement) {
-        const localTime = new Date(currentTime[index].getTime() + offset * 3600000);
-        const hours = padLeft(localTime.getHours(), 2);
-        const minutes = padLeft(localTime.getMinutes(), 2);
-        const seconds = padLeft(localTime.getSeconds(), 2);
-        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    private padLeft(value: number, length: number): string {
+        let strValue = value.toString();
+        while (strValue.length < length) {
+            strValue = '0' + strValue;
+        }
+        return strValue;
     }
-    console.log(`Clock updated (${clockElementId}): ${clockElement?.textContent}`);
-}
 
-function toggleMode(clockIndex: number): void {
-    editMode[clockIndex] = (editMode[clockIndex] + 1) % 3;
-    const modeButton = document.getElementById(`mode-${clockIndex + 1}`);
-    if (modeButton) {
-        if (editMode[clockIndex] === 0) {
-            modeButton.textContent = 'Mode: View';
-        } else if (editMode[clockIndex] === 1) {
-            modeButton.textContent = 'Mode: Edit Hours';
-        } else if (editMode[clockIndex] === 2) {
-            modeButton.textContent = 'Mode: Edit Minutes';
+    private updateClock(): void {
+        const clockElement = document.getElementById(this.clockElementId);
+        if (clockElement) {
+            const localTime = new Date(this.currentTime.getTime() + this.offset * 3600000);
+            const hours = this.padLeft(localTime.getHours(), 2);
+            const minutes = this.padLeft(localTime.getMinutes(), 2);
+            const seconds = this.padLeft(localTime.getSeconds(), 2);
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
         }
     }
-    console.log(`Mode changed for clock ${clockIndex + 1}: ${editMode[clockIndex]}`);
-}
 
-function increaseTime(clockIndex: number): void {
-    if (editMode[clockIndex] === 1) {
-        currentTime[clockIndex].setHours(currentTime[clockIndex].getHours() + 1);
-    } else if (editMode[clockIndex] === 2) {
-        currentTime[clockIndex].setMinutes(currentTime[clockIndex].getMinutes() + 1);
-    }
-    updateClock(`clock-time-${clockIndex + 1}`, timeOffsets[clockIndex], clockIndex);
-    console.log(`Time increased for clock ${clockIndex + 1}: ${currentTime[clockIndex]}`);
-}
+    private updateRealTime(): void {
+        const now = new Date().getTime();
+        const elapsed = now - this.lastUpdateTime;
+        this.lastUpdateTime = now;
 
-function resetTime(clockIndex: number): void {
-    currentTime[clockIndex] = new Date();
-    updateClock(`clock-time-${clockIndex + 1}`, timeOffsets[clockIndex], clockIndex);
-    console.log(`Time reset for clock ${clockIndex + 1}`);
-}
-
-function updateAllClocks(): void {
-    for (let i = 0; i < 3; i++) {
-        updateClock(`clock-time-${i + 1}`, timeOffsets[i], i);
-    }
-}
-
-export { updateAllClocks, toggleMode, increaseTime, resetTime };
-
-setInterval(() => {
-    const now = new Date().getTime();
-    const elapsed = now - lastUpdateTime;
-    lastUpdateTime = now;
-
-    for (let i = 0; i < 3; i++) {
-        if (editMode[i] === 0) {
-            currentTime[i] = new Date(currentTime[i].getTime() + elapsed);
+        if (this.editMode === 0) {
+            this.currentTime = new Date(this.currentTime.getTime() + elapsed);
         } else {
-            currentTime[i].setSeconds(currentTime[i].getSeconds() + Math.floor(elapsed / 1000));
+            this.currentTime.setSeconds(this.currentTime.getSeconds() + Math.floor(elapsed / 1000));
+        }
+        this.updateClock();
+    }
+
+    public toggleMode(): void {
+        this.editMode = (this.editMode + 1) % 3;
+        const modeButton = document.getElementById(`mode-${this.clockIndex + 1}`);
+        if (modeButton) {
+            if (this.editMode === 0) {
+                modeButton.textContent = 'Mode: View';
+            } else if (this.editMode === 1) {
+                modeButton.textContent = 'Mode: Edit Hours';
+            } else if (this.editMode === 2) {
+                modeButton.textContent = 'Mode: Edit Minutes';
+            }
         }
     }
-    updateAllClocks();
-}, 1000);
+
+    public increaseTime(): void {
+        if (this.editMode === 1) {
+            this.currentTime.setHours(this.currentTime.getHours() + 1);
+        } else if (this.editMode === 2) {
+            this.currentTime.setMinutes(this.currentTime.getMinutes() + 1);
+        }
+        this.updateClock();
+    }
+
+    public resetTime(): void {
+        this.currentTime = new Date();
+        this.updateClock();
+    }
+}
+
+export default Clock;

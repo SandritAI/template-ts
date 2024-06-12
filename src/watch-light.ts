@@ -1,13 +1,16 @@
-let isLightOn = false;
+class LightManager {
+    private isLightOn: boolean = false;
 
-function toggleLight(): void {
-    const body = document.body;
-    isLightOn = !isLightOn;
-    if (isLightOn) {
-        body.classList.add('light-on');
-    } else {
-        body.classList.remove('light-on');
+    public toggleLight(): void {
+        const body = document.body;
+        this.isLightOn = !this.isLightOn;
+        if (this.isLightOn) {
+            body.classList.add('light-on');
+        } else {
+            body.classList.remove('light-on');
+        }
     }
 }
 
-export { toggleLight };
+export default LightManager;
+

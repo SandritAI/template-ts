@@ -1,31 +1,46 @@
 import './index.css';
-import { updateAllClocks, toggleMode, increaseTime, resetTime } from './watch-time';
-import { toggleLight } from './watch-light';
+import Clock from './watch-time';
+import LightManager from './watch-light';
 
-updateAllClocks();
+class ClockManager {
+    private clocks: Clock[] = [];
+    private lightManager: LightManager = new LightManager();
 
-document.addEventListener('DOMContentLoaded', () => {
-    const lightButton = document.getElementById('light');
+    constructor() {
+        for (let i = 1; i <= 3; i++) {
+            const clock = new Clock(`clock-time-${i}`, i - 1, i - 1);
+            this.clocks.push(clock);
+            this.bindClockButtons(i, clock);
+        }
+        this.bindLightButton();
+    }
 
-    for (let i = 1; i <= 3; i++) {
-        const modeButton = document.getElementById(`mode-${i}`);
-        const increaseButton = document.getElementById(`increase-${i}`);
-        const resetButton = document.getElementById(`reset-${i}`); // Bouton Reset
+    private bindClockButtons(clockIndex: number, clock: Clock): void {
+        const modeButton = document.getElementById(`mode-${clockIndex}`);
+        const increaseButton = document.getElementById(`increase-${clockIndex}`);
+        const resetButton = document.getElementById(`reset-${clockIndex}`);
 
         if (modeButton) {
-            modeButton.addEventListener('click', () => toggleMode(i - 1));
+            modeButton.addEventListener('click', () => clock.toggleMode());
         }
 
         if (increaseButton) {
-            increaseButton.addEventListener('click', () => increaseTime(i - 1));
+            increaseButton.addEventListener('click', () => clock.increaseTime());
         }
 
-        if (resetButton) { 
-            resetButton.addEventListener('click', () => resetTime(i - 1));
+        if (resetButton) {
+            resetButton.addEventListener('click', () => clock.resetTime());
         }
     }
 
-    if (lightButton) {
-        lightButton.addEventListener('click', toggleLight);
+    private bindLightButton(): void {
+        const lightButton = document.getElementById('light');
+        if (lightButton) {
+            lightButton.addEventListener('click', () => this.lightManager.toggleLight());
+        }
     }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new ClockManager();
 });
