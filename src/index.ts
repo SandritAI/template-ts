@@ -1,17 +1,16 @@
 import './index.css';
-import { updateAllClocks, toggleMode, increaseTime } from './watch-time';
+import { updateAllClocks, toggleMode, increaseTime, resetTime } from './watch-time';
 import { toggleLight } from './watch-light';
 
-// Call updateAllClocks to display the time immediately
 updateAllClocks();
 
-// Attach events after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const lightButton = document.getElementById('light');
 
     for (let i = 1; i <= 3; i++) {
         const modeButton = document.getElementById(`mode-${i}`);
         const increaseButton = document.getElementById(`increase-${i}`);
+        const resetButton = document.getElementById(`reset-${i}`); // Bouton Reset
 
         if (modeButton) {
             modeButton.addEventListener('click', () => toggleMode(i - 1));
@@ -19,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (increaseButton) {
             increaseButton.addEventListener('click', () => increaseTime(i - 1));
+        }
+
+        if (resetButton) { 
+            resetButton.addEventListener('click', () => resetTime(i - 1));
         }
     }
 

@@ -1,8 +1,8 @@
-let editMode = [0, 0, 0]; // Array to track edit mode for each clock
-let currentTime = [new Date(), new Date(), new Date()]; // Array to track time for each clock
+let editMode = [0, 0, 0]; // Edit of each clock
+let currentTime = [new Date(), new Date(), new Date()]; // Hour of each clock
 let lastUpdateTime = new Date().getTime();
 
-const timeOffsets = [0, 1, 2]; // Define time offsets for each clock in hours
+const timeOffsets = [0, 1, 2]; 
 
 function padLeft(value: number, length: number): string {
     let strValue = value.toString();
@@ -49,16 +49,20 @@ function increaseTime(clockIndex: number): void {
     console.log(`Time increased for clock ${clockIndex + 1}: ${currentTime[clockIndex]}`);
 }
 
+function resetTime(clockIndex: number): void {
+    currentTime[clockIndex] = new Date();
+    updateClock(`clock-time-${clockIndex + 1}`, timeOffsets[clockIndex], clockIndex);
+    console.log(`Time reset for clock ${clockIndex + 1}`);
+}
+
 function updateAllClocks(): void {
     for (let i = 0; i < 3; i++) {
         updateClock(`clock-time-${i + 1}`, timeOffsets[i], i);
     }
 }
 
-// Expose necessary functions
-export { updateAllClocks, toggleMode, increaseTime };
+export { updateAllClocks, toggleMode, increaseTime, resetTime };
 
-// Update clocks every second
 setInterval(() => {
     const now = new Date().getTime();
     const elapsed = now - lastUpdateTime;
