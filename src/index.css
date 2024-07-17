@@ -14,13 +14,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 20px; 
+    margin: 20px; /* Ajouté pour espacer les horloges horizontalement */
 }
 
 .clocks-wrapper {
     display: flex;
     justify-content: center;
-    gap: 150px;
+    align-items: center;
+    gap: 50px; /* Espacement horizontal entre les horloges */
 }
 
 .button-container {
@@ -103,11 +104,11 @@ body {
 }
 
 .btn-outline-primary:focus {
-    background-color: #007bff !important; 
-    color: #fff !important; 
+    background-color: #007bff !important;
+    color: #fff !important;
 }
 
 .light-on .btn-outline-primary:focus {
-    background-color: #ff0000 !important; 
-    color: #000000 !important; 
+    background-color: #ff0000 !important;
+    color: #000000 !important;
 }

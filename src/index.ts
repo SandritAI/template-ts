@@ -1,16 +1,16 @@
 import './index.css';
 
-// Modèle (Model)
+// Model
 class Model {
     private currentTime: Date;
-    private isLightOnFlag: boolean = false;
-    private editMode: number = 0; // 0: Not editable, 1: Edit hours, 2: Edit minutes
+    private editMode: number = 0;
     private offset: number;
     private lastUpdateTime: number;
+    private lightOn: boolean = false; // Renommé pour éviter le conflit
 
     constructor(offset: number = 0) {
         this.offset = offset;
-        this.currentTime = new Date(Date.now() + this.offset * 3600000);
+        this.currentTime = new Date();
         this.lastUpdateTime = Date.now();
         setInterval(() => this.updateRealTime(), 1000);
     }
@@ -31,6 +31,10 @@ class Model {
         }
     }
 
+    resetTime(): void {
+        this.currentTime = new Date();
+    }
+
     isTimeEditable(): boolean {
         return this.editMode !== 0;
     }
@@ -40,11 +44,11 @@ class Model {
     }
 
     toggleLight(): void {
-        this.isLightOnFlag = !this.isLightOnFlag;
+        this.lightOn = !this.lightOn;
     }
 
     isLightOn(): boolean {
-        return this.isLightOnFlag;
+        return this.lightOn;
     }
 
     private updateRealTime(): void {
@@ -60,39 +64,55 @@ class Model {
     }
 }
 
-// Vue (View)
+// View
 class View {
     private timeElements: HTMLElement[] = [];
     private modeButtons: HTMLButtonElement[] = [];
     private increaseButtons: HTMLButtonElement[] = [];
     private resetButtons: HTMLButtonElement[] = [];
     private lightButton: HTMLButtonElement;
+    private clocksWrapper: HTMLElement;
 
     constructor() {
+        this.clocksWrapper = document.querySelector('.clocks-wrapper') as HTMLElement;
         this.lightButton = this.createLightButton();
     }
 
     createClock(clockIndex: number): void {
         const clockContainer = document.createElement('div');
+        const clockTitle = document.createElement('div');
+        const clock = document.createElement('div');
+        const clockFace = document.createElement('div');
         const timeElement = document.createElement('div');
         const modeButton = document.createElement('button');
         const increaseButton = document.createElement('button');
         const resetButton = document.createElement('button');
 
-        timeElement.id = `clock-time-${clockIndex}`;
-        timeElement.innerText = '00:00:00';
-        modeButton.id = `mode-${clockIndex}`;
-        modeButton.innerText = 'Mode: View';
-        increaseButton.id = `increase-${clockIndex}`;
+        clockContainer.className = 'clock-wrapper';
+        clockTitle.className = 'clock-title';
+        clock.className = 'clock';
+        clockFace.className = 'clock-face';
+        timeElement.className = 'clock-time';
+
+        clockTitle.innerText = `Clock ${clockIndex + 1}`;
+        clockFace.id = `clock-face-${clockIndex + 1}`;
+        timeElement.id = `clock-time-${clockIndex + 1}`;
+        modeButton.id = `mode-${clockIndex + 1}`;
+        increaseButton.id = `increase-${clockIndex + 1}`;
+        resetButton.id = `reset-${clockIndex + 1}`;
+
+        modeButton.innerText = 'Mode';
         increaseButton.innerText = 'Increase';
-        resetButton.id = `reset-${clockIndex}`;
         resetButton.innerText = 'Reset';
 
-        clockContainer.appendChild(timeElement);
+        clock.appendChild(clockFace);
+        clock.appendChild(timeElement);
+        clockContainer.appendChild(clockTitle);
+        clockContainer.appendChild(clock);
         clockContainer.appendChild(modeButton);
         clockContainer.appendChild(increaseButton);
         clockContainer.appendChild(resetButton);
-        document.body.appendChild(clockContainer);
+        this.clocksWrapper.appendChild(clockContainer);
 
         this.timeElements.push(timeElement);
         this.modeButtons.push(modeButton);
@@ -144,7 +164,7 @@ class View {
     }
 }
 
-// Contrôleur (Controller)
+// Controller
 class Controller {
     private models: Model[];
     private view: View;
@@ -175,7 +195,7 @@ class Controller {
     }
 
     handleResetButtonClick(index: number): void {
-        this.models[index] = new Model(index); // Resets the model
+        this.models[index].resetTime();
         this.updateView();
     }
 
