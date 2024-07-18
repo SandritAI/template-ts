@@ -76,9 +76,9 @@ class Model {
 // View
 class View {
     private timeElements: HTMLElement[] = [];
-    private modeButtons: HTMLButtonElement[] = [];
-    private increaseButtons: HTMLButtonElement[] = [];
-    private resetButtons: HTMLButtonElement[] = [];
+    private modeButtons: HTMLInputElement[] = [];
+    private increaseButtons: HTMLInputElement[] = [];
+    private resetButtons: HTMLInputElement[] = [];
     private lightButton: HTMLButtonElement;
     private clocksWrapper: HTMLElement;
 
@@ -93,9 +93,13 @@ class View {
         const clock = document.createElement('div');
         const clockFace = document.createElement('div');
         const timeElement = document.createElement('div');
-        const modeButton = document.createElement('button');
-        const increaseButton = document.createElement('button');
-        const resetButton = document.createElement('button');
+        const buttonGroup = document.createElement('div');
+        const modeButtonLabel = document.createElement('label');
+        const increaseButtonLabel = document.createElement('label');
+        const resetButtonLabel = document.createElement('label');
+        const modeButton = document.createElement('input');
+        const increaseButton = document.createElement('input');
+        const resetButton = document.createElement('input');
 
         clockContainer.className = 'clock-wrapper';
         clockTitle.className = 'clock-title';
@@ -110,17 +114,40 @@ class View {
         increaseButton.id = `increase-${clockIndex + 1}`;
         resetButton.id = `reset-${clockIndex + 1}`;
 
-        modeButton.innerText = 'Mode';
-        increaseButton.innerText = 'Increase';
-        resetButton.innerText = 'Reset';
+        modeButton.type = 'radio';
+        increaseButton.type = 'radio';
+        resetButton.type = 'radio';
+        modeButton.name = `options-${clockIndex + 1}`;
+        increaseButton.name = `options-${clockIndex + 1}`;
+        resetButton.name = `options-${clockIndex + 1}`;
+        modeButton.autocomplete = 'off';
+        increaseButton.autocomplete = 'off';
+        resetButton.autocomplete = 'off';
+
+        modeButtonLabel.className = 'btn btn-secondary';
+        increaseButtonLabel.className = 'btn btn-secondary';
+        resetButtonLabel.className = 'btn btn-secondary';
+
+        modeButtonLabel.innerText = 'Mode';
+        increaseButtonLabel.innerText = 'Increase';
+        resetButtonLabel.innerText = 'Reset';
+
+        modeButtonLabel.appendChild(modeButton);
+        increaseButtonLabel.appendChild(increaseButton);
+        resetButtonLabel.appendChild(resetButton);
+
+        buttonGroup.className = 'btn-group btn-group-toggle';
+        buttonGroup.setAttribute('data-toggle', 'buttons');
+
+        buttonGroup.appendChild(modeButtonLabel);
+        buttonGroup.appendChild(increaseButtonLabel);
+        buttonGroup.appendChild(resetButtonLabel);
 
         clock.appendChild(clockFace);
         clock.appendChild(timeElement);
         clockContainer.appendChild(clockTitle);
         clockContainer.appendChild(clock);
-        clockContainer.appendChild(modeButton);
-        clockContainer.appendChild(increaseButton);
-        clockContainer.appendChild(resetButton);
+        clockContainer.appendChild(buttonGroup);
         this.clocksWrapper.appendChild(clockContainer);
 
         this.timeElements.push(timeElement);
@@ -133,6 +160,7 @@ class View {
         const lightButton = document.createElement('button');
         lightButton.id = 'light';
         lightButton.innerText = 'Light';
+        lightButton.className = 'btn btn-secondary'; // Change to btn-secondary
         document.body.appendChild(lightButton);
         return lightButton;
     }
@@ -145,7 +173,11 @@ class View {
 
     setMode(clockIndex: number, mode: number): void {
         const modes = ['Mode: View', 'Mode: Edit Hours', 'Mode: Edit Minutes'];
-        this.modeButtons[clockIndex].innerText = modes[mode];
+        // Update the button labels
+        const buttonLabels = this.clocksWrapper.querySelectorAll(`#clock-time-${clockIndex + 1} + .btn-group .btn`);
+        buttonLabels.forEach((label, index) => {
+            label.classList.toggle('active', index === mode);
+        });
     }
 
     onModeButtonClick(clockIndex: number, handler: () => void): void {
@@ -172,6 +204,8 @@ class View {
         }
     }
 }
+
+
 
 // Controller
 class Controller {

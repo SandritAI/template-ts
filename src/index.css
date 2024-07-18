@@ -14,18 +14,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px; /* Ajouté pour espacer les horloges horizontalement */
+    margin: 50px; /* Ajouté pour espacer les horloges horizontalement */
 }
 
 .clocks-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 50px; /* Espacement horizontal entre les horloges */
+    gap: 70px; /* Espacement horizontal entre les horloges */
 }
 
 .button-container {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -89,8 +89,8 @@ body {
     color: #fff;
 }
 
-.light-on .clock-time {
-    color: #fff;
+body.light-on .clock-time {
+    color: red; 
 }
 
 .light-on .btn-outline-primary {
@@ -111,4 +111,44 @@ body {
 .light-on .btn-outline-primary:focus {
     background-color: #ff0000 !important;
     color: #000000 !important;
+}
+
+/* Styles supplémentaires déplacés depuis le HTML */
+body.light-on {
+    background-color: #333;
+    color: #fff;
+}
+
+.clock-wrapper {
+    margin-bottom: 20px; /* Espace entre les horloges */
+}
+
+.clock-title,
+.clock,
+.clock-face,
+.clock-time,
+.btn-group {
+    margin-bottom: 10px;
+}
+
+.btn-group {
+    display: flex;
+}
+
+.button-group {
+    display: flex;
+}
+
+.button-group .btn {
+    border-radius: 0; /* Supprime les coins arrondis pour des boutons collés */
+}
+
+.button-group .btn:first-child {
+    border-top-left-radius: 0.25rem; /* Arrondir le coin gauche du premier bouton */
+    border-bottom-left-radius: 0.25rem; /* Arrondir le coin gauche du premier bouton */
+}
+
+.button-group .btn:last-child {
+    border-top-right-radius: 0.25rem; /* Arrondir le coin droit du dernier bouton */
+    border-bottom-right-radius: 0.25rem; /* Arrondir le coin droit du dernier bouton */
 }
