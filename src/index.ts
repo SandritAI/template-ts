@@ -6,33 +6,44 @@ class Model {
     private editMode: number = 0;
     private offset: number;
     private lastUpdateTime: number;
-    private lightOn: boolean = false; // Renommé pour éviter le conflit
+    private lightOn: boolean = false;
+    private editOffset: number = 0;
 
     constructor(offset: number = 0) {
-        this.offset = offset;
+        this.offset = offset * 3600000; // Convert hours to milliseconds
         this.currentTime = new Date();
         this.lastUpdateTime = Date.now();
         setInterval(() => this.updateRealTime(), 1000);
     }
 
     getTime(): Date {
-        return new Date(this.currentTime.getTime() + this.offset * 3600000);
+        const now = Date.now();
+        const timeElapsed = now - this.lastUpdateTime;
+        return new Date(this.currentTime.getTime() + this.offset + this.editOffset + timeElapsed);
     }
 
     toggleMode(): void {
+        if (this.editMode !== 0) {
+            this.currentTime = this.getTime(); // Apply the editOffset to currentTime
+            this.editOffset = 0;
+            this.lastUpdateTime = Date.now();
+        }
         this.editMode = (this.editMode + 1) % 3;
     }
 
     increaseTime(): void {
         if (this.editMode === 1) {
-            this.currentTime.setHours(this.currentTime.getHours() + 1);
+            this.editOffset += 3600000; // 1 hour in milliseconds
         } else if (this.editMode === 2) {
-            this.currentTime.setMinutes(this.currentTime.getMinutes() + 1);
+            this.editOffset += 60000; // 1 minute in milliseconds
         }
     }
 
     resetTime(): void {
-        this.currentTime = new Date();
+        const now = new Date();
+        this.currentTime = new Date(now.getTime() - this.offset);
+        this.editOffset = 0;
+        this.lastUpdateTime = Date.now();
     }
 
     isTimeEditable(): boolean {
@@ -52,17 +63,15 @@ class Model {
     }
 
     private updateRealTime(): void {
-        const now = Date.now();
-        const elapsed = now - this.lastUpdateTime;
-        this.lastUpdateTime = now;
-
         if (this.editMode === 0) {
+            const now = Date.now();
+            const elapsed = now - this.lastUpdateTime;
             this.currentTime = new Date(this.currentTime.getTime() + elapsed);
-        } else {
-            this.currentTime.setSeconds(this.currentTime.getSeconds() + Math.floor(elapsed / 1000));
+            this.lastUpdateTime = now;
         }
     }
 }
+
 
 // View
 class View {
